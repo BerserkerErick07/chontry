@@ -1,0 +1,36 @@
+# Servicio systemd del sensor de ChonTry (Linux). Mínimo privilegio:
+#  - corre con el usuario sin privilegios "chontry", nunca como root;
+#  - solo recibe CAP_NET_RAW (capturar) y CAP_NET_ADMIN (modo promiscuo);
+#  - sistema de archivos de solo lectura salvo su carpeta de datos.
+# Instalar: ver docs/manual_instalacion.md, sección "Sensor en Linux".
+[Unit]
+Description=ChonTry - sensor IDS/IPS (puerto SPAN)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=chontry
+Group=chontry
+WorkingDirectory=/opt/chontry
+EnvironmentFile=/etc/chontry/sensor.env
+Environment=CHONTRY_DATOS=/var/lib/chontry
+ExecStart=/opt/chontry/.venv/bin/python -m sensor --interfaz
+Restart=on-failure
+RestartSec=10
+
+AmbientCapabilities=CAP_NET_RAW CAP_NET_ADMIN
+CapabilityBoundingSet=CAP_NET_RAW CAP_NET_ADMIN
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/chontry
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

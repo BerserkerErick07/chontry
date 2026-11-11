@@ -1,0 +1,5 @@
+# Finales de línea fijos: LF en todo (Linux, CI, systemd), CRLF solo en los .bat de Windows
+* text=auto eol=lf
+*.bat text eol=crlf
+*.png binary
+*.pcap binary

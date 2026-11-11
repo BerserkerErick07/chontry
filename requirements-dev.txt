@@ -1,0 +1,4 @@
+# Herramientas de desarrollo y auditoría (no se necesitan para usar ChonTry)
+-r requirements.txt
+bandit==1.7.10
+pip-audit==2.7.3

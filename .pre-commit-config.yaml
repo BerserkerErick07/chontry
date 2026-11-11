@@ -1,0 +1,24 @@
+# Revisión automática antes de cada commit (NIST SSDF PW.7 y PS.1)
+#   pip install pre-commit && pre-commit install
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
+  - repo: local
+    hooks:
+      - id: buscar-secretos
+        name: búsqueda de secretos de ChonTry
+        entry: python herramientas/buscar_secretos.py
+        language: system
+        pass_filenames: false
+      - id: bandit
+        name: análisis estático (Bandit)
+        entry: bandit -r comun consola sensor herramientas -ll -q
+        language: system
+        pass_filenames: false
+      - id: pruebas
+        name: pruebas unitarias
+        entry: python -m unittest discover -s pruebas -t .
+        language: system
+        pass_filenames: false

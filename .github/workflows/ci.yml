@@ -1,0 +1,43 @@
+# Integración continua: pruebas (incluida la de punta a punta con PostgreSQL real),
+# análisis estático (Bandit), auditoría de dependencias y búsqueda de secretos.
+# NIST SSDF PW.7 (revisión de código) y PW.8 (pruebas).
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: ci-solo-pruebas
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      CHONTRY_PRUEBAS_PG_ADMIN: postgresql://postgres:ci-solo-pruebas@localhost:5432/postgres  # secreto-ficticio (contenedor efímero de CI)
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Bibliotecas del sistema para Qt en modo sin pantalla
+        run: sudo apt-get update && sudo apt-get install -y libegl1 libxkbcommon0 libgl1 libdbus-1-3
+      - name: Dependencias
+        run: python -m pip install -r requirements-dev.txt
+      - name: Pruebas unitarias y de integración
+        run: python -m unittest discover -s pruebas -t . -v
+      - name: Análisis estático (Bandit)
+        run: bandit -r comun consola sensor herramientas -ll
+      - name: Auditoría de dependencias (pip-audit)
+        run: pip-audit -r requirements.txt
+      - name: Búsqueda de secretos
+        run: python herramientas/buscar_secretos.py

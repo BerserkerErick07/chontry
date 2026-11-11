@@ -1,0 +1,29 @@
+# Secretos y credenciales: nunca al repositorio (NIST SSDF PS.1)
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# Datos locales del sensor y de la consola (logs, buffer cifrado, caché del catálogo)
+datos/
+logs/
+*.log
+*.db
+*.sqlite
+*.cache
+
+# Capturas de tráfico (pueden contener datos de la red) y salidas generadas
+*.pcapng
+capturas/
+!pruebas/pcaps/*.pcap
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+build/
+dist/
+*.spec
+.pytest_cache/

@@ -1,0 +1,28 @@
+Pruebas de las migraciones 002-004 contra Neon (PostgreSQL 18) — 2026-11-03
+Roles temporales: ct_prueba_analista (chontry_consola), ct_prueba_admin (chontry_admin), ct_prueba_sensor (chontry_sensor)
+Todo se ejecutó en una transacción revertida: no quedaron datos ni roles de prueba.
+
+H2-1 puerto con salto de linea + comando: bloqueado
+H2-2 puerto con ; reload: bloqueado
+H2-3 fabricante inventado: bloqueado
+H2-4 filtro BPF con ; rm -rf: bloqueado
+H2-5 interfaz con && reboot: bloqueado
+H2-6 valores legitimos (Npcap, BPF valido, GigabitEthernet1/0/24): aceptados
+H3-1 email en la auditoria: ausente
+H3-2 password_hash en la auditoria: ausente
+H3-3 fallos en la cadena de auditoria: 0
+H8-1 analista se sube a admin: denegado
+H8-2 analista se quita el bloqueo: denegado
+H8-3 analista lee hashes de contrasena: denegado
+H8-4 analista edita la cuenta del admin: 0 filas (RLS)
+H8-5 analista edita su propia cuenta: 1 fila
+H8-6 analista se agrega a la lista blanca: denegado
+H8-7 analista marca un activo como protegido: denegado
+H8-8 analista crea contencion ya aprobada: denegado
+H8-9 analista propone contencion: permitido
+H8-10 analista aprueba su propuesta: denegado
+H8-11 sensor aplica una propuesta manual sin aprobar: denegado
+H8-12 admin aprueba la contencion: 1 fila
+H8-13 sensor aplica la contencion aprobada: 1 fila
+
+Resultado: 22/22 como se esperaba.

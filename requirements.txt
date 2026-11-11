@@ -1,0 +1,20 @@
+# Dependencias de ChonTry, versiones exactas (NIST SSDF PW.4: componentes de terceros fijados y revisados).
+# Instalar:  python -m pip install -r requirements.txt
+
+# Consola de escritorio
+PySide6==6.8.1
+qrcode==8.2
+
+# Base de datos (TLS verify-full con la CA de certifi)
+psycopg[binary]==3.3.8
+certifi==2026.10.23
+
+# Criptografía: Argon2id, AES-256-GCM, TOTP y keyring del sistema
+argon2-cffi==25.1.0
+cryptography==50.0.2
+pyotp==2.10.0
+keyring==25.7.0
+
+# Sensor: captura y análisis de paquetes; contención SSH en switches
+scapy==2.8.0
+netmiko==4.8.0
