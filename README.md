@@ -34,6 +34,7 @@ cd chontry
 - [Manual de usuario](docs/manual_usuario.md) — cómo usar cada sección de la consola y qué puede hacer cada rol
 - [Manual de funcionamiento](docs/manual_funcionamiento.md) — arquitectura, flujo de datos, reglas, ciclo de una contención, base de datos, criptografía y trazabilidad normativa
 - [Guía de pruebas](docs/guia_de_pruebas.md) — qué probar y qué resultado esperar
+- [Guía de uso real](docs/guia_uso_real.md) — detectar un escaneo real, decidir qué bloquear y dar acceso a otra persona
 
 ## Seguridad (resumen)
 

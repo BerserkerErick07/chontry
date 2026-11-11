@@ -173,6 +173,29 @@ def registrar_switch(conexion, nombre, ip, fabricante, credencial_ref, huella=No
         return cur.fetchone()[0]
 
 
+TIPOS_SEGMENTO = ("gestion", "usuarios", "servidores", "invitados", "cuarentena", "otro")
+
+
+def registrar_segmento(conexion, nombre: str, red: str, vlan: int, tipo: str) -> int:
+    """Registra (o actualiza) un segmento de la red: el sensor lo usa para saber la VLAN de cada equipo."""
+    import ipaddress
+    try:
+        red = str(ipaddress.ip_network(red, strict=False))
+    except ValueError:
+        raise EntradaInvalida("Red inválida; use el formato 192.168.1.0/24") from None
+    if not 1 <= vlan <= 4094:
+        raise EntradaInvalida("La VLAN va de 1 a 4094")
+    if tipo not in TIPOS_SEGMENTO:
+        raise EntradaInvalida(f"Tipo inválido; use uno de: {', '.join(TIPOS_SEGMENTO)}")
+    with conexion.transaction(), conexion.cursor() as cur:
+        cur.execute("""insert into chontry.segmentos_red (nombre, red, vlan_id, tipo)
+                       values (%s, %s, %s, %s::chontry.tipo_segmento)
+                       on conflict (red) do update set nombre = excluded.nombre, vlan_id = excluded.vlan_id,
+                                                       tipo = excluded.tipo
+                       returning id""", (nombre, red, vlan, tipo))
+        return cur.fetchone()[0]
+
+
 def registrar_sensor(conexion, nombre, interfaz, filtro=None, ubicacion=None, switch=None) -> str:
     validar_interfaz_captura(interfaz)
     if filtro:
@@ -244,6 +267,9 @@ def main(argv=None) -> int:
     c.add_argument("nombre"); c.add_argument("--ip", required=True); c.add_argument("--fabricante", required=True)
     c.add_argument("--credencial", required=True, help="nombre de la entrada en el keyring")
     c.add_argument("--huella"); c.add_argument("--puerto-span"); c.add_argument("--vlan-cuarentena", type=int, default=999)
+    c = sub.add_parser("registrar-segmento", help="registra un segmento de su red (red, VLAN y tipo)")
+    c.add_argument("nombre"); c.add_argument("--red", required=True); c.add_argument("--vlan", type=int, required=True)
+    c.add_argument("--tipo", default="usuarios", choices=TIPOS_SEGMENTO)
     c = sub.add_parser("registrar-sensor", help="registra un sensor y muestra su CHONTRY_SENSOR_ID")
     c.add_argument("nombre"); c.add_argument("--interfaz", required=True); c.add_argument("--filtro")
     c.add_argument("--ubicacion"); c.add_argument("--switch")
@@ -295,6 +321,9 @@ def main(argv=None) -> int:
                 ident = registrar_switch(conexion, args.nombre, args.ip, args.fabricante, args.credencial,
                                          args.huella, args.puerto_span, args.vlan_cuarentena)
                 print(f"Switch {args.nombre} registrado con id {ident}.")
+            elif args.orden == "registrar-segmento":
+                ident = registrar_segmento(conexion, args.nombre, args.red, args.vlan, args.tipo)
+                print(f"Segmento {args.nombre} ({args.red}, VLAN {args.vlan}) registrado con id {ident}.")
             elif args.orden == "registrar-sensor":
                 ident = registrar_sensor(conexion, args.nombre, args.interfaz, args.filtro, args.ubicacion, args.switch)
                 print(f"Sensor registrado. Ponga en el .env del sensor:\nCHONTRY_SENSOR_ID={ident}")
