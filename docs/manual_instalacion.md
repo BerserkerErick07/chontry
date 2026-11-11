@@ -28,7 +28,7 @@ Este manual explica cómo dejar ChonTry funcionando desde cero: la base de datos
 ## 3. Descargar e instalar
 
 ```powershell
-git clone https://github.com/<usuario>/chontry.git
+git clone https://github.com/BerserkerErick07/chontry.git
 cd chontry
 .\instalar.bat
 ```

@@ -19,7 +19,7 @@ ChonTry escucha una copia del tráfico desde el **puerto espejo (SPAN)** del swi
 ## Inicio rápido
 
 ```powershell
-git clone https://github.com/<usuario>/chontry.git
+git clone https://github.com/BerserkerErick07/chontry.git
 cd chontry
 .\instalar.bat                 # crea .venv e instala dependencias con versión fija
 # edite .env (ver docs/manual_instalacion.md)
