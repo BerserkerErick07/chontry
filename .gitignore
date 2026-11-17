@@ -28,3 +28,7 @@ dist/
 *.spec
 .pytest_cache/
 !empaquetado/*.spec
+
+# Reportes exportados desde la consola
+chontry_*.html
+chontry_*.csv

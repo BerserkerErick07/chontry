@@ -14,7 +14,8 @@ EXTENSIONES = {".py", ".sql", ".md", ".txt", ".yaml", ".yml", ".toml", ".json", 
 
 PATRONES = {
     "Contraseña de Neon": re.compile(r"npg_[A-Za-z0-9]{8,}"),
-    "URL de BD con contraseña": re.compile(r"postgres(?:ql)?://[^:/\s]+:(?!CONTRASENA@)[^@\s]+@"),
+    # Se excluyen el marcador CONTRASENA de los manuales y las plantillas {variable} del código
+    "URL de BD con contraseña": re.compile(r"postgres(?:ql)?://[^:/\s]+:(?!CONTRASENA@|\{)[^@\s]+@"),
     "Asignación de secreto": re.compile(r"(?i)\b(password|passwd|secret|token|api[_-]?key)\s*=\s*['\"][^'\"]{6,}['\"]"),
     "Clave de AWS": re.compile(r"AKIA[0-9A-Z]{16}"),
     "Token de GitHub": re.compile(r"gh[pousr]_[A-Za-z0-9]{36}"),
