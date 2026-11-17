@@ -15,7 +15,7 @@ import signal
 import sys
 import threading
 
-from comun.config import cargar_env, carpeta_datos
+from comun.config import cargar_env, carpeta_datos, preparar_salida, usar_env
 from comun.cripto import ClaveNoDisponible, Cifrador
 from comun.db import ConfiguracionInsegura, conectar
 from comun.errores import configurar_log
@@ -53,11 +53,15 @@ def _imprimir(motor_manejar):
 
 
 def main(argv=None) -> int:
-    args = _argumentos(argv)
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    args = _argumentos(usar_env(list(sys.argv[1:] if argv is None else argv)))
+    preparar_salida()
     cargar_env()
     configurar_log(str(carpeta_datos() / "sensor.log"))
-    logging.getLogger("chontry").addHandler(logging.StreamHandler(sys.stdout))
+    if sys.stdout is not None:
+        logging.getLogger("chontry").addHandler(logging.StreamHandler(sys.stdout))
+    # El Centro de control detiene el sensor (aunque corra como administrador) creando este archivo
+    bandera = carpeta_datos() / "detener.sensor"
+    bandera.unlink(missing_ok=True)
     _verificar_privilegios(args.permitir_root)
 
     try:
@@ -80,6 +84,14 @@ def main(argv=None) -> int:
 
     detener = threading.Event()
     signal.signal(signal.SIGINT, lambda *_: detener.set())
+
+    def vigilar_bandera():
+        while not detener.wait(1):
+            if bandera.exists():
+                bandera.unlink(missing_ok=True)
+                log.info("Detención solicitada por el Centro de control")
+                detener.set()
+    threading.Thread(target=vigilar_bandera, name="bandera", daemon=True).start()
     servicio.iniciar_tareas(con_contencion=con_bd)
 
     if args.solo_contencion:

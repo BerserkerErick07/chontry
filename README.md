@@ -16,7 +16,26 @@ ChonTry escucha una copia del tráfico desde el **puerto espejo (SPAN)** del swi
 | **Base de datos** (PostgreSQL / Neon) | Roles por perfil, seguridad por filas, triggers de autorización y auditoría encadenada con SHA-256 |
 | **Herramienta de administración** (`python -m herramientas.admin`) | Migraciones, logins por persona, usuarios, sensores, switches y clave maestra |
 
-## Inicio rápido
+## Probar ChonTry con un clic (para el equipo y los auditores)
+
+![Centro de control](docs/img/24_centro_de_control.png)
+
+**Opción A — sin instalar nada (Windows):** en [Releases](https://github.com/BerserkerErick07/chontry/releases) descargue **`ChonTry-Windows.zip`**, descomprímalo y abra **`ChonTry.exe`**.
+
+**Opción B — desde el código:** clone el repositorio y haga doble clic en **`Iniciar ChonTry.bat`**. La primera vez instala Python 3.12 (si falta, preguntando antes) y las librerías.
+
+En los dos casos se abre el **Centro de control**, que **enciende todo solo**:
+
+1. Descarga e inicia un **PostgreSQL 17 portable** (solo la primera vez, unos 330 MB, sin permisos de administrador).
+2. Crea el **laboratorio**: tablas, roles, usuarios con segundo factor y ataques de ejemplo.
+3. Enciende el **sensor**. Si el equipo tiene Npcap (viene con Nmap), pide permiso de administrador para capturar la red en vivo.
+4. Abre la **consola**.
+
+A la derecha muestra el **acceso de prueba**: usuario, contraseña y el **código de 6 dígitos en vivo** de cada rol, con botones para copiar. Desde ahí también se simulan ataques, se analizan capturas `.pcap` y se abren los manuales.
+
+> Si Windows muestra «Windows protegió su PC», pulse **Más información → Ejecutar de todos modos**: el ejecutable no tiene firma comercial.
+
+## Instalación para operación real
 
 ```powershell
 git clone https://github.com/BerserkerErick07/chontry.git

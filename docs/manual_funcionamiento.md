@@ -57,6 +57,8 @@ Decisiones clave:
 | `consola/` | `acceso.py` (autenticación), `dialogos_acceso.py`, `repositorio.py` (backend real), `estado.py` + `simulador.py` (modo demostración), `vistas.py`, `ventana.py`, `tema.py` |
 | `db/` | Migraciones `001`–`007` y sus pruebas SQL |
 | `herramientas/` | `admin.py` (instalación de la BD), `laboratorio.py`, `generar_pcaps.py`, `buscar_secretos.py`, `capturas_consola.py` |
+| `lanzador/` | **Centro de control**: PostgreSQL portable, laboratorio, procesos del sensor y la consola, acceso de prueba con TOTP en vivo |
+| `chontry_app.py`, `empaquetado/` | Punto de entrada único (`ChonTry.exe [consola\|sensor\|admin]`) y receta de PyInstaller |
 | `pruebas/` | Pruebas unitarias y de integración |
 | `despliegue/` | Servicio systemd del sensor |
 

@@ -4,12 +4,28 @@ Este manual es para quien usa la consola todos los días: administradores, anali
 
 ---
 
+## 0. Centro de control (laboratorio)
+
+![Centro de control](img/24_centro_de_control.png)
+
+Si va a **probar o auditar** ChonTry, abra **`ChonTry.exe`** o **`Iniciar ChonTry.bat`**. El Centro de control enciende la base de datos, el sensor y la consola.
+
+| Zona | Para qué |
+|---|---|
+| **Componentes** | Estado de la base de datos, el laboratorio, el sensor y la consola (verde = en marcha). **Captura en vivo** pide permiso de administrador para escuchar la red; **Recrear** borra el laboratorio y genera usuarios nuevos |
+| **Acceso de prueba** | Usuario, contraseña y **código de 6 dígitos** de cada rol (Administrador, Analista, Auditor). Use **Copiar** y péguelos en la consola |
+| **Probar el sistema** | **Simular ataques** (escaneos, movimiento lateral, fuerza bruta, suplantación) o **Analizar una captura (.pcap)** hecha con Wireshark |
+| **Documentación** | Abre los manuales en el navegador |
+| **Actividad** | Lo que va haciendo el Centro de control |
+
+Al cerrar la ventana pregunta si quiere **detener todo**: base de datos, sensor y consolas.
+
 ## 1. Iniciar sesión
 
 ![Inicio de sesión](img/00_inicio_sesion.png)
 
 1. Abra **ChonTry.bat** (o `python -m consola`).
-2. Deje marcada **Base de datos (operación real)**, escriba su usuario y su contraseña y pulse **Iniciar sesión**.
+2. Deje marcada **Base de datos (operación real)**, escriba su usuario y su contraseña y pulse **Iniciar sesión**. En el laboratorio, cópielos del **Acceso de prueba** del Centro de control.
 3. Escriba el **código de 6 dígitos** de su app autenticadora.
 
 ![Segundo factor](img/21_segundo_factor.png)

@@ -2,13 +2,13 @@
 
 Para el compañero que descarga el proyecto y para quien lo audite. Requiere el **laboratorio local** del [manual de instalación, sección 7](manual_instalacion.md#7-laboratorio-local-en-10-minutos).
 
-> En PowerShell, antes de cada prueba: `$env:CHONTRY_ENV = ".env.lab"`
+> Lo más fácil: abra **`ChonTry.exe`** o **`Iniciar ChonTry.bat`**. El **Centro de control** enciende todo y muestra los usuarios y códigos de prueba; desde ahí puede **Simular ataques** o **Analizar una captura**. Los comandos de esta guía son para quien quiera hacerlo a mano (antes, en PowerShell: `$env:CHONTRY_ENV = "$env:LOCALAPPDATA\ChonTry\.env.lab"`).
 
 ## A. Pruebas automáticas
 
 ```powershell
 .venv\Scripts\python.exe -m unittest discover -s pruebas -t . -v
-.venv\Scripts\bandit.exe -r comun consola sensor herramientas
+.venv\Scripts\python.exe -m bandit -r comun consola sensor herramientas lanzador
 .venv\Scripts\python.exe herramientas\buscar_secretos.py
 ```
 

@@ -14,7 +14,7 @@ repos:
         pass_filenames: false
       - id: bandit
         name: análisis estático (Bandit)
-        entry: bandit -r comun consola sensor herramientas -ll -q
+        entry: bandit -r comun consola sensor herramientas lanzador chontry_app.py -ll -q
         language: system
         pass_filenames: false
       - id: pruebas

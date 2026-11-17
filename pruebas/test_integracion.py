@@ -11,15 +11,31 @@ import unittest
 
 import pyotp
 
-from comun.config import RAIZ, cargar_env
+from comun.config import RAIZ
 from comun.cripto import Cifrador
 from comun.db import conectar
 
-cargar_env(RAIZ / ".env.pruebas")
-URL_PG = os.environ.get("CHONTRY_PRUEBAS_PG_ADMIN")
+def _postgres_de_pruebas() -> str | None:
+    """URL del superusuario de un PostgreSQL LOCAL encendido: la variable, el .env.pruebas del
+    repositorio o el del Centro de control. None si ninguno responde en pocos segundos."""
+    import psycopg
+    from comun.config import casa_usuario, leer_env
+    candidatas = [os.environ.get("CHONTRY_PRUEBAS_PG_ADMIN"),
+                  leer_env(RAIZ / ".env.pruebas").get("CHONTRY_PRUEBAS_PG_ADMIN"),
+                  leer_env(casa_usuario() / ".env.pruebas").get("CHONTRY_PRUEBAS_PG_ADMIN")]
+    for url in filter(None, candidatas):
+        try:
+            with psycopg.connect(url, connect_timeout=3):
+                return url
+        except psycopg.Error:
+            continue
+    return None
 
 
-@unittest.skipUnless(URL_PG, "sin PostgreSQL de pruebas (CHONTRY_PRUEBAS_PG_ADMIN)")
+URL_PG = _postgres_de_pruebas()
+
+
+@unittest.skipUnless(URL_PG, "sin PostgreSQL de pruebas encendido (Centro de control o CHONTRY_PRUEBAS_PG_ADMIN)")
 class PruebaExtremoAExtremo(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

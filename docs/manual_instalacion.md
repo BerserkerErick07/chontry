@@ -6,6 +6,31 @@ Este manual explica cómo dejar ChonTry funcionando desde cero: la base de datos
 
 ---
 
+## 0. Inicio con un clic (laboratorio para pruebas y auditoría)
+
+Para **probar o auditar** ChonTry no hace falta seguir este manual: basta el **Centro de control**.
+
+| Cómo | Pasos |
+|---|---|
+| **ChonTry.exe** (no necesita Python) | Releases del repositorio → `ChonTry-Windows.zip` → descomprimir → `ChonTry.exe` |
+| **Desde el código** | `git clone …` → doble clic en **`Iniciar ChonTry.bat`** |
+
+El Centro de control hace solo, en este orden:
+1. Descarga PostgreSQL 17 portable de EnterpriseDB (la primera vez).
+2. Crea la base local en el puerto 54330.
+3. Monta el laboratorio y registra la red local del equipo.
+4. Carga ataques de ejemplo.
+5. Enciende el sensor (captura en vivo si hay Npcap, con el aviso de administrador de Windows).
+6. Abre la consola.
+
+Muestra los usuarios de prueba con su contraseña y su código TOTP en vivo.
+
+Todo lo que crea queda en **`%LOCALAPPDATA%\ChonTry`**: base de datos, credenciales de prueba, logs y capturas. Para empezar de cero, pulse **Recrear** en el laboratorio o borre esa carpeta.
+
+> **Windows 11 con Smart App Control:** puede bloquear librerías nuevas sin firma. ChonTry fija versiones conocidas y, si aun así se bloquea el módulo de PostgreSQL, usa automáticamente la `libpq.dll` del PostgreSQL portable. Si al abrir `ChonTry.exe` aparece «Windows protegió su PC», use **Más información → Ejecutar de todos modos**.
+
+El resto de este manual es para la **operación real** (Neon, varios equipos, switch).
+
 ## 1. Qué se instala y dónde
 
 | Pieza | Dónde corre | Para qué |
@@ -192,7 +217,9 @@ Para listar las interfaces: `.venv\Scripts\python.exe -c "from scapy.all import 
 | `python -m sensor --pcap archivo.pcap --sin-bd` | Solo muestra las detecciones; no necesita base de datos |
 | `python -m sensor --solo-contencion` | Solo ejecuta en el switch lo que aprueban los administradores |
 
-## 7. Laboratorio local en 10 minutos
+## 7. Laboratorio local manual (alternativa al Centro de control)
+
+> Lo más fácil es el Centro de control (sección 0). Esta sección explica el mismo proceso paso a paso.
 
 Para probar **todo** el sistema en un solo PC sin red real ni Neon:
 

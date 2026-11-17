@@ -25,7 +25,7 @@ import psycopg
 from psycopg import sql
 
 from comun import cripto
-from comun.config import RAIZ, cargar_env
+from comun.config import RAIZ, cargar_env, preparar_salida
 from comun.db import VARIABLE_ADMIN, conectar
 from comun.validacion import (EntradaInvalida, validar_fabricante, validar_filtro_bpf,
                               validar_interfaz_captura, validar_interfaz_switch, validar_ip)
@@ -249,7 +249,7 @@ def _conexion_admin() -> psycopg.Connection:
 
 
 def main(argv=None) -> int:
-    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    preparar_salida()
     cargar_env()
     p = argparse.ArgumentParser(prog="python -m herramientas.admin", description=__doc__.split("\n\n")[0],
                                 add_help=False)

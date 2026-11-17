@@ -13,7 +13,7 @@ import psycopg
 from PySide6.QtCore import QEvent, QObject, QTimer, Signal
 from PySide6.QtWidgets import QApplication, QDialog, QMessageBox
 
-from comun.config import cargar_env, carpeta_datos
+from comun.config import cargar_env, carpeta_datos, usar_env
 from comun.db import ConfiguracionInsegura, conectar
 from comun.errores import configurar_log, manejar_error
 from consola import tema
@@ -52,6 +52,7 @@ class VigilanteInactividad(QObject):
 
 
 def _argumentos():
+    sys.argv = [sys.argv[0]] + usar_env(sys.argv[1:])
     parser = argparse.ArgumentParser(prog="consola", description="ChonTry · consola de escritorio")
     parser.add_argument("--captura", type=Path, help="carpeta donde guardar capturas del modo demostración")
     parser.add_argument("--segundos", type=int, default=20, help="segundos de simulación antes de capturar")
@@ -146,6 +147,8 @@ def main() -> int:
     app = QApplication(sys.argv)
     app.setApplicationName("ChonTry")
     app.setStyleSheet(tema.QSS)
+    from consola.icono import icono
+    app.setWindowIcon(icono())
 
     if args.captura:
         estado = Estado("erick", args.rol, REGLAS_LOCALES, CONFIG_LOCAL, "Local (demostración)")
